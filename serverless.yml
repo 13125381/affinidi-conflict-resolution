@@ -1,0 +1,37 @@
+service: ${file(package.json):name}
+provider:
+    name: aws
+    runtime: nodejs20.x
+    profile: ${env:PROFILE, 'default'}
+    region: ${env:REGION, 'eu-west-2'}
+    stage: ${env:ENV, 'dev'}
+    iamRoleStatements: ${file(./serverless/role.yml):iamRoleStatements}
+    stackTags:
+      Name: ${self:service}
+      Environment: ${self:provider.stage}
+      Owner: Affinidi
+      ManagedBy: Serverless
+      CostCentre: Affinidi Elements
+    environment:
+        AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+        STAGE: ${self:provider.stage}
+
+package:
+    individually: true
+
+plugins:
+    - serverless-esbuild
+    - serverless-offline
+
+functions:
+    - ${file(./serverless/functions.yml)}
+
+custom:
+  esbuild:
+      packager: pnpm
+      target: node20
+      concurrency: 2
+      watch:
+          pattern: ['./**/*.ts']
+          ignore: ["./**/*.test.ts", '.build', 'dist', 'node_modules', '.serverless']
+      exclude: []

@@ -1,0 +1,25 @@
+image: atlassian/default-image:4
+
+options:
+    size: 2x
+
+definitions:
+    steps:
+        - step: &build-test
+              name: Build and run tests
+              caches:
+                  - node
+              script:
+                  - nvm install 20
+                  - npm install -g pnpm@latest
+                  - pnpm install --frozen-lockfile
+                  - npm run build:ci
+                  - npm run test:ci
+
+pipelines:
+    pull-requests:
+        '**':
+            - step: *build-test
+    branches:
+        master:
+            - step: *build-test

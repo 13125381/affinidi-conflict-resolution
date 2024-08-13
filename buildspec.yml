@@ -1,0 +1,23 @@
+version: 0.2
+env:
+    secrets-manager:
+        NPM_TOKEN: npm_token
+    parameter-store:
+        bootstrap: bootstrap
+        notification: notification
+phases:
+    install:
+        runtime-versions:
+            nodejs: latest
+        commands:
+            - n 20
+            - eval "$bootstrap"
+            - npm install -g serverless@^3.38.0
+            - npm install -g pnpm@latest
+            - pnpm install --frozen-lockfile
+    build:
+        commands:
+            - sls deploy
+    post_build:
+        commands:
+            - eval "$notification"

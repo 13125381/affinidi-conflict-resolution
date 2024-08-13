@@ -1,0 +1,6 @@
+# Example iamRoleStatements
+iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+          - cloudwatch:PutMetricData
+      Resource: '*'

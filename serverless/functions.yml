@@ -1,0 +1,26 @@
+get-affinidi-data:
+  handler: src/functions/get-affinidi-data.handler
+  events:
+    - http:
+        path: /data
+        method: GET
+        cors: true
+        authorizer:
+          name: custom-authorizer
+          identitySource: method.request.header.Authorization
+          type: request        
+
+put-affinidi-data:
+  handler: src/functions/put-affinidi-data.handler
+  events:
+    - http:
+        path: /data/{did}
+        method: PUT
+        cors: true
+        authorizer:
+          name: custom-authorizer
+          identitySource: method.request.header.Authorization
+          type: request
+
+custom-authorizer:
+  handler: src/functions/custom-authorizer.handler
