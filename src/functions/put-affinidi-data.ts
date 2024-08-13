@@ -16,9 +16,6 @@ export interface MergeConflictResult {
     status: MergeConflictStatus
 }
 
-cosmin.m@affinidi.com
- 
-
 export const handler = async (event: APIGatewayEvent) => {
     try {
         const did = event.requestContext.identity.user;
